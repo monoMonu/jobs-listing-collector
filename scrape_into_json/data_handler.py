@@ -43,4 +43,3 @@ def update_output(new_data):
   except (OSError, Exception) as e:
       print(f"Error updating data in file: {e}")
       
-
