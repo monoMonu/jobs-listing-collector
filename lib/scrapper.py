@@ -104,4 +104,4 @@ def scrape(role, location, stipend, page=1, type="jobs", post_time=["Just now", 
 
     except Exception as e:
         print(f"Some error occurred: {e}")
-        send_email("Scraping Failed", f"An error occurred during scraping: {str(e)}")
+        send_email("Scraping Failed", f"Error while scraping: {str(e)}")
