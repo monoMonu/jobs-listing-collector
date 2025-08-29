@@ -10,7 +10,9 @@ import json
 
 
 def scheduled_run():
-  schedule.every(2).minutes.do(update_sheet)
+  schedule.every().day.at("07:00").do(update_sheet)
+  # schedule.every().minute.at(":30").do(update_sheet)
+
 
   while True:
     schedule.run_pending()
@@ -19,6 +21,7 @@ def scheduled_run():
 
 def update_sheet():
   try:
+    start_time = time.perf_counter()
     creds_json = os.getenv("GOOGLE_CREDS")
     if creds_json is None:
       raise ValueError("Environment Variable GOOGLE_CREDS is not set.")
@@ -71,7 +74,10 @@ def update_sheet():
       sheet.clear()
       set_with_dataframe(sheet, df_combined, row=2)
       sheet.update([[str(day_counter + 1)]], "A1")
+    
     print("Successfully updated the sheet.")
+    end_time = time.perf_counter()
+    print(f"Scraping Execution Time: {end_time - start_time:.6f} seconds")
   
   except Exception as e:
     print("Error during scheduled update : ")
@@ -79,7 +85,7 @@ def update_sheet():
 
 
 def main():
-  
+  # scheduled_run()
   update_sheet()
 
 if __name__ == "__main__":

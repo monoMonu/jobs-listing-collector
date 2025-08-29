@@ -1,6 +1,15 @@
 from lib.send_mail import html_template, send_email
 import time
 from lib.scrapper import scrape
+import schedule
+
+def scheduled_run():
+  schedule.every().day.at("07:00").do(scrape_n_mail)
+
+  while True:
+    schedule.run_pending()
+    time.sleep(1)
+
 
 def release_mails(data):
     try:
@@ -14,7 +23,7 @@ def release_mails(data):
         print(f"Error: {e}")
 
 
-def main():
+def scrape_n_mail():
     try:
         start_time = time.perf_counter()
         data = scrape(
@@ -34,6 +43,10 @@ def main():
         print("Error in main process.")
         print(f"Error: {e}")
 
+
+def main():
+    scrape_n_mail()
+    # scheduled_run()
 
 if __name__ == "__main__":
     main()
