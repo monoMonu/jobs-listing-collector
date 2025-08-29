@@ -32,7 +32,7 @@ def getUrl(role, location, page, stipend, type="jobs"):
     return url
 
 
-def scrape(role, location, page, stipend, type="jobs"):
+def scrape(role, location, stipend, page=1, type="jobs", post_time=["Just now", "Today", "Few hours ago"]):
     try: 
         data = []
         url = getUrl(role, location, page, stipend, type)
@@ -72,8 +72,8 @@ def scrape(role, location, page, stipend, type="jobs"):
                 print(f"No postings found on page {curr_page_no}")
 
             for i, postings in enumerate(only_postings, start=len(data)+1):
-                post_time = postings.find(class_="detail-row-2").find("span").get_text()
-                if post_time not in set(["Just now", "Today", "Few hours ago"]):
+                scrapped_post_time = postings.find(class_="detail-row-2").find("span").get_text()
+                if scrapped_post_time not in set(post_time):
                     continue
 
                 company_name = postings.find(class_="company-name").get_text("", strip=True)
@@ -93,7 +93,7 @@ def scrape(role, location, page, stipend, type="jobs"):
                     "location": scrapped_location,
                     "stipend": scrapped_stipend,
                     "duration": scrapped_duration,
-                    "post_time": post_time,
+                    "post_time": scrapped_post_time,
                     "apply_link": apply_link
                 })
 

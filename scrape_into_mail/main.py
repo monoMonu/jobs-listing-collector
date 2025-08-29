@@ -11,7 +11,15 @@ def release_mails(data):
 
 def main():
     start_time = time.perf_counter()
-    data = scrape(type="internships", role=["backend-development", "front-end-development", "full-stack-development", "software-development", "web-development"], location="delhi", page=1, stipend="")
+    data = scrape(
+        type="internships", 
+        role=["backend-development", "front-end-development", "full-stack-development", "software-development", "web-development"], 
+        # role=["science"],
+        location="delhi", 
+        page=1, 
+        stipend="1000",
+        post_time=["Just now", "Today", "Few hours ago"]
+    )
     if data:
         release_mails(data)
     end_time = time.perf_counter()

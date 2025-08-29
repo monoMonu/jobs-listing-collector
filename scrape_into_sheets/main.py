@@ -21,8 +21,22 @@ def main():
   existing_data = sheet.get_all_records(head=2)
   df_existing = pd.DataFrame(existing_data)
 
-  data = scrape(type="internships", role=["backend-development", "front-end-development", "full-stack-development", "software-development", "web-development"], location="delhi", page=1, stipend="")
+  data = scrape(
+      type="internships",
+      role=[
+          "backend-development", 
+          "front-end-development", 
+          "full-stack-development", 
+          "software-development", 
+          "web-development"
+      ],
+      # role=["science"],
+      location="delhi",
+      stipend="",
+      post_time=["Just now", "Today", "Few hours ago"]
+  )  
   df_new = pd.DataFrame(data)
+  df_new = df_new.drop(columns=["id"])
 
   counter_cell = sheet.acell("A1").value
   if not counter_cell:
@@ -36,6 +50,7 @@ def main():
     sheet.update([["1"]], "A1")
   else:
     df_combined = pd.concat([df_existing, df_new], ignore_index=True)
+    df_combined = df_combined.drop_duplicates(keep="first")
     sheet.clear()
     set_with_dataframe(sheet, df_combined, row=2)
     sheet.update([[str(day_counter + 1)]], "A1")
